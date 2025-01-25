@@ -335,9 +335,6 @@ public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelativ
     return m_gyro.getAngle() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
-  public void zeroPosition() {
-    //Some zero position for the gyro??? fix later if needed with resetDisplacement???
-  }
 
   public void zeroHeading() {
     m_gyro.reset();
