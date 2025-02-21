@@ -103,4 +103,22 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+/* Motor IDs */
+public static int algaeintakeID = 20;
+public static int leftflywheelID = 21;
+public static int rightflywheelID = 22;
+public static int motor1ID = 23;
+public static int motor2ID = 24;
+public static int ClimberID = 25;
+public static int WristID = 26;
+
+
+/* Speed multipliers */
+public static int algaeintakeMult = 1;
+public static int leftflywheelMult = 1;
+public static int rightflywheelMult = 1;
+public static int motor1Mult = 1;
+public static int motor2Mult = 1;
+public static int ClimberMult = 1;
+public static int WristMult = 1;
 }

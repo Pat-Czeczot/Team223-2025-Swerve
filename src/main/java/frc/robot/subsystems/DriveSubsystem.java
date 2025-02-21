@@ -15,6 +15,7 @@ import edu.wpi.first.util.WPIUtilJNI;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.utils.SwerveUtils;
+import pabeles.concurrency.ConcurrencyOps.NewInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -37,13 +38,13 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kFrontRightChassisAngularOffset);
 
   private final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
-      DriveConstants.kRearLeftDrivingCanId,
-      DriveConstants.kRearLeftTurningCanId,
-      DriveConstants.kBackLeftChassisAngularOffset);
+      DriveConstants.kRearLeftDrivingCanId, 
+      DriveConstants.kRearLeftTurningCanId, 
+      DriveConstants.kBackLeftChassisAngularOffset); 
 
-  private final MAXSwerveModule m_rearRight = new MAXSwerveModule(
+  private final MAXSwerveModule m_rearRight = new MAXSwerveModule( 
       DriveConstants.kRearRightDrivingCanId,
-      DriveConstants.kRearRightTurningCanId,
+      DriveConstants.kRearRightTurningCanId, 
       DriveConstants.kBackRightChassisAngularOffset);
 
   private AHRS m_gyro = new AHRS(AHRS.NavXComType.kMXP_SPI); // NAVX IS CW POSITIVE AND CCW NEGATIVE -- IF ISSUES WITH DRIVING OR AUTOS TRY TO NEGATE AND NORMALIZE THE ANGLE FROM .getAngle()
@@ -165,7 +166,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearLeft.setDesiredState(desiredStates[2]);
     m_rearRight.setDesiredState(desiredStates[3]);
   }
-
+    
 
   // Update odometry in the periodic block
   @Override
@@ -257,7 +258,7 @@ public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelativ
     xSpeedCommanded = m_currentTranslationMag * Math.cos(m_currentTranslationDir);
     ySpeedCommanded = m_currentTranslationMag * Math.sin(m_currentTranslationDir);
     m_currentRotation = m_rotLimiter.calculate(rot);
-
+    
 
   } else {
     xSpeedCommanded = xSpeed;

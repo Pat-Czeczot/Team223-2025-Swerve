@@ -15,17 +15,42 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.Servo;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.DriveSubsystem;
+import pabeles.concurrency.IntObjectTask;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
-
 import com.pathplanner.lib.commands.PathPlannerAuto;
+
+
+//Subsystems
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.AlgaeIntake;
+import frc.robot.subsystems.CoralIntake;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Climber;
+
+
+//Commands
+import frc.robot.commands.Commands.AlgaeIntakeSpit;
+import frc.robot.commands.Commands.AlgaeIntakeSuck;
+import frc.robot.commands.Commands.CoralIntakeSpit;
+import frc.robot.commands.Commands.CoralIntakeSuck;
+import frc.robot.commands.Commands.ElevatorUp;
+import frc.robot.commands.Commands.ElevatorDown;
+import frc.robot.commands.Commands.ClimberUp;
+import frc.robot.commands.Commands.ClimberDown;
+import frc.robot.commands.Commands.WristUp;
+import frc.robot.commands.Commands.WristDown;
+
+
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -33,12 +58,29 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
  * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
  * (including subsystems, commands, and button mappings) should be declared here.
  */
-public class RobotContainer {
-  // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
-  // The driver's controller
+public class RobotContainer {
+
+
+  /* Controllers */
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  private final CommandXboxController driver = new CommandXboxController(0);
+  private final CommandXboxController operator = new CommandXboxController(1);
+
+
+  /* Subsystems */
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  public final AlgaeIntake Algaeintake = new AlgaeIntake();
+  public final CoralIntake CoralIntake = new CoralIntake();
+  public final Elevator Elevator = new Elevator();
+  public final Climber Climber = new Climber();
+  public final Wrist Wrist = new Wrist();
+
+
+  Servo exampleServo = new Servo(0); 
+
+
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -61,7 +103,22 @@ public class RobotContainer {
                 true, true),
             m_robotDrive)
             );
-  }
+            driver.rightTrigger().whileTrue(new AlgaeIntakeSuck(Algaeintake)); 
+            driver.leftTrigger().whileTrue(new AlgaeIntakeSpit(Algaeintake));   
+
+            driver.a().whileTrue(new CoralIntakeSuck(CoralIntake)); 
+            driver.b().whileTrue(new CoralIntakeSpit(CoralIntake)); 
+
+            driver.x().whileTrue(new ElevatorUp(Elevator)); 
+            driver.y().whileTrue(new ElevatorDown(Elevator)); 
+
+            driver.povUp().whileTrue(new ClimberUp(Climber)); 
+            driver.povDown().whileTrue(new ClimberDown(Climber)); 
+
+            driver.povLeft().whileTrue(new WristUp(Wrist)); 
+            driver.povRight().whileTrue(new WristDown(Wrist));
+
+  }        
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -77,6 +134,12 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+
+
+            
+            exampleServo.set(75.0);
+
+
   }
 
   /**
