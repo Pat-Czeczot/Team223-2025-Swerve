@@ -8,6 +8,7 @@ import frc.robot.Constants;
 public class Climber extends SubsystemBase {
     
   SparkFlex Climber;
+ 
 
   public Climber() {
     Climber = new SparkFlex(Constants.ClimberID, MotorType.kBrushless);

@@ -114,11 +114,10 @@ public static int WristID = 26;
 
 
 /* Speed multipliers */
-public static int algaeintakeMult = 1;
-public static int leftflywheelMult = 1;
-public static int rightflywheelMult = 1;
-public static int motor1Mult = 1;
-public static int motor2Mult = 1;
-public static int ClimberMult = 1;
-public static int WristMult = 1;
+public static double algaeintakeMult = 1;
+public static double leftflywheelMult = 1;
+public static double rightflywheelMult = 1;
+public static double elevatorMult = 1;
+public static double ClimberMult = 1;
+public static double WristMult = 0.5;
 }

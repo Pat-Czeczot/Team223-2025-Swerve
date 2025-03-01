@@ -71,6 +71,8 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
       });
 
+  private boolean isPathFlipped = false;
+
   // Create a new DriveSubsystem
   public DriveSubsystem() {
     anglePIDController.enableContinuousInput(-180, 180);
@@ -118,7 +120,16 @@ public class DriveSubsystem extends SubsystemBase {
 
   //IMPORTANT!!!!! CHANGE THIS FUNCTION LATER ON TO ACCEPT INPUT FROM SMARTDASHBORD AND RETURN TRUE IF YOU ARE ON RED SIDE AND RETURN FALSE IF YOU ARE ON BLUE SIDE
   public boolean flipPathToRedSide(){ 
-    return false;
+    return isPathFlipped;
+  }
+
+  public void setSide(String redBlue){
+    if(redBlue.equals("red")){
+      isPathFlipped = true;
+    }else{
+      isPathFlipped = false;
+    }
+    
   }
 
   // Return the currently-estimated pose of the robot
@@ -128,13 +139,15 @@ public class DriveSubsystem extends SubsystemBase {
 
   // Reset the odometry to the specified pose
   public void resetOdometry(Pose2d pose) {
+    /*
     m_gyro.reset(); //remove if isnt working or try m_gyro.resetDisplacement(), that might work as well
     m_frontLeft.resetEncoders();
     m_frontRight.resetEncoders();
     m_rearLeft.resetEncoders();
     m_rearRight.resetEncoders();
+    */
     m_odometry.resetPosition(
-      Rotation2d.fromDegrees(m_gyro.getAngle()),
+      Rotation2d.fromDegrees(getHeading()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -193,7 +206,7 @@ public class DriveSubsystem extends SubsystemBase {
    *                      field.
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
-  /* 
+  
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     // Convert the commanded speeds into the correct units for the drivetrain
     double xSpeedDelivered = xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
@@ -212,7 +225,28 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
   }
+
+
+/*
+public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+    
+      SwerveModuleState[] swerveModuleStates =
+        Constants.DriveConstants.kDriveKinematics.toSwerveModuleStates(
+            fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                    translation.getX(), translation.getY(), rotation, Rotation2d.fromDegrees(getHeading()))
+                : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DriveConstants.kMaxSpeedMetersPerSecond);
+      
+
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontRight.setDesiredState(swerveModuleStates[1]);
+    m_rearLeft.setDesiredState(swerveModuleStates[2]);
+    m_rearRight.setDesiredState(swerveModuleStates[3]);
+  }
 */
+  
+/* 
 public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
 
   double xSpeedCommanded;
@@ -294,6 +328,7 @@ public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelativ
   m_rearRight.setDesiredState(swerveModuleStates[3]);
 }
 
+*/
   private double compensateAngle() {
     var ret = -anglePIDController.calculate(m_gyro.getAngle() - 180);
     return ret;
@@ -338,6 +373,6 @@ public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelativ
 
 
   public void zeroHeading() {
-    m_gyro.reset();
+    m_gyro.zeroYaw();
   }
 }

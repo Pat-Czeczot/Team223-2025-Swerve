@@ -21,8 +21,8 @@ public class ElevatorDown extends Command {
 
   @Override
   public void execute() {
-    motor1.setSpeed(-1 * Constants.motor1Mult);
-    motor2.setSpeed(-1 * Constants.motor2Mult);
+    motor1.setSpeed(-1 * Constants.elevatorMult);
+    motor2.setSpeed(-1 * Constants.elevatorMult);
   }
   @Override
   public void end(boolean interrupted) {

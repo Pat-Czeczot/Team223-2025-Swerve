@@ -14,6 +14,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.Servo;
 import frc.robot.Constants.AutoConstants;
@@ -21,13 +23,21 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import pabeles.concurrency.IntObjectTask;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import java.util.List;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 //Subsystems
 import frc.robot.subsystems.DriveSubsystem;
@@ -70,17 +80,17 @@ public class RobotContainer {
 
   /* Subsystems */
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  public final AlgaeIntake Algaeintake = new AlgaeIntake();
+  public final AlgaeIntake AlgaeIntake = new AlgaeIntake();
   public final CoralIntake CoralIntake = new CoralIntake();
   public final Elevator Elevator = new Elevator();
   public final Climber Climber = new Climber();
   public final Wrist Wrist = new Wrist();
 
-
-  Servo exampleServo = new Servo(0); 
-
-
-
+  /* Auto */
+  private final SendableChooser<Command> chooser;
+  private final SendableChooser<String> redBlue;
+  public Pose2d startingPose;
+  
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -88,6 +98,18 @@ public class RobotContainer {
   public RobotContainer() {
 
     m_robotDrive.zeroHeading();
+
+    Map<String,Command> namedCommands = new HashMap<String,Command>();
+    namedCommands.put("testauto", new InstantCommand(() -> {System.out.println("Test Auto Works");}));
+    NamedCommands.registerCommands(namedCommands);
+    redBlue = new SendableChooser<String>();
+    redBlue.addOption("red", "red");
+    redBlue.addOption("blue", "blue");
+    chooser = AutoBuilder.buildAutoChooser("testauto");
+    SmartDashboard.putData("Auto:", chooser);
+    SmartDashboard.putData("Side:", redBlue);
+
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -97,27 +119,13 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband), //left stick 
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband), //left stick 
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband), //right stick
-                true, true),
+                -MathUtil.applyDeadband(driver.getLeftY(), OIConstants.kDriveDeadband), //left stick 
+                -MathUtil.applyDeadband(driver.getLeftX(), OIConstants.kDriveDeadband), //left stick 
+                -MathUtil.applyDeadband(driver.getRightX(), OIConstants.kDriveDeadband), //right stick
+                true),
             m_robotDrive)
             );
-            driver.rightTrigger().whileTrue(new AlgaeIntakeSuck(Algaeintake)); 
-            driver.leftTrigger().whileTrue(new AlgaeIntakeSpit(Algaeintake));   
-
-            driver.a().whileTrue(new CoralIntakeSuck(CoralIntake)); 
-            driver.b().whileTrue(new CoralIntakeSpit(CoralIntake)); 
-
-            driver.x().whileTrue(new ElevatorUp(Elevator)); 
-            driver.y().whileTrue(new ElevatorDown(Elevator)); 
-
-            driver.povUp().whileTrue(new ClimberUp(Climber)); 
-            driver.povDown().whileTrue(new ClimberDown(Climber)); 
-
-            driver.povLeft().whileTrue(new WristUp(Wrist)); 
-            driver.povRight().whileTrue(new WristDown(Wrist));
-
+           
   }        
 
   /**
@@ -135,10 +143,22 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
+    // driver.rightTrigger().whileTrue(new AlgaeIntakeSuck(AlgaeIntake)); 
+    // driver.leftTrigger().whileTrue(new AlgaeIntakeSpit(AlgaeIntake));  
+           
+    //driver.y().toggleOnTrue(new InstantCommand(() -> swerve.zeroHeading(), swerve)); //Change this slightly to reset gyro when driving
 
-            
-            exampleServo.set(75.0);
+    driver.a().whileTrue(new CoralIntakeSuck(CoralIntake)); 
+    driver.b().whileTrue(new CoralIntakeSpit(CoralIntake)); 
 
+    driver.x().whileTrue(new ElevatorUp(Elevator)); 
+    driver.y().whileTrue(new ElevatorDown(Elevator)); 
+
+    driver.povUp().whileTrue(new ClimberUp(Climber)); 
+    driver.povDown().whileTrue(new ClimberDown(Climber)); 
+
+    driver.rightTrigger().whileTrue(new WristUp(Wrist)); 
+    driver.leftTrigger().whileTrue(new WristDown(Wrist));
 
   }
 
@@ -191,5 +211,18 @@ public class RobotContainer {
 
     //This will have to be changed to allow us to choose the path in the smart dashboard using a sendable chooser with autobuilder
     return new PathPlannerAuto("testauto");
+/* 
+    try{
+      startingPose = PathPlannerAuto.getStaringPoseFromAutoFile(chooser.getSelected().getName());
+    } catch(Exception e){
+      System.out.println("Error Accessing Auto Pose From File");
+    }
+     startingPose = PathPlannerPath.
+    return new SequentialCommandGroup(
+      new InstantCommand(() -> { m_robotDrive.zeroHeading(); m_robotDrive.resetOdometry(startingPose); m_robotDrive.setSide(redBlue.getSelected());}),
+      chooser.getSelected()
+    );
+
+    */
   }
 }

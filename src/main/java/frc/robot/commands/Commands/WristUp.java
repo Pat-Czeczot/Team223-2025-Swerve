@@ -15,12 +15,12 @@ public class WristUp extends Command {
 }
 @Override
   public void initialize() {
-    Wrist.setSpeed(1 * Constants.WristMult);
+    Wrist.setSpeed(-1 * Constants.WristMult);
     }
 
   @Override
   public void execute() {
-    Wrist.setSpeed(1 * Constants.WristMult);
+    Wrist.setSpeed(-1 * Constants.WristMult);
   }
   @Override
   public void end(boolean interrupted) {
