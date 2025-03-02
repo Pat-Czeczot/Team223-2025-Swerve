@@ -100,12 +100,12 @@ public class RobotContainer {
     m_robotDrive.zeroHeading();
 
     Map<String,Command> namedCommands = new HashMap<String,Command>();
-    namedCommands.put("testauto", new InstantCommand(() -> {System.out.println("Test Auto Works");}));
+    namedCommands.put("print test", new InstantCommand(() -> {System.out.println("Test Auto Works");}));
     NamedCommands.registerCommands(namedCommands);
     redBlue = new SendableChooser<String>();
     redBlue.addOption("red", "red");
     redBlue.addOption("blue", "blue");
-    chooser = AutoBuilder.buildAutoChooser("testauto");
+    chooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto:", chooser);
     SmartDashboard.putData("Side:", redBlue);
 
@@ -143,10 +143,10 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    // driver.rightTrigger().whileTrue(new AlgaeIntakeSuck(AlgaeIntake)); 
-    // driver.leftTrigger().whileTrue(new AlgaeIntakeSpit(AlgaeIntake));  
+     driver.rightTrigger().whileTrue(new AlgaeIntakeSuck(AlgaeIntake)); 
+     driver.leftTrigger().whileTrue(new AlgaeIntakeSpit(AlgaeIntake));  
            
-    //driver.y().toggleOnTrue(new InstantCommand(() -> swerve.zeroHeading(), swerve)); //Change this slightly to reset gyro when driving
+    //driver.y().toggleOnTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive)); //Change this slightly to reset gyro when driving
 
     driver.a().whileTrue(new CoralIntakeSuck(CoralIntake)); 
     driver.b().whileTrue(new CoralIntakeSpit(CoralIntake)); 
@@ -154,11 +154,11 @@ public class RobotContainer {
     driver.x().whileTrue(new ElevatorUp(Elevator)); 
     driver.y().whileTrue(new ElevatorDown(Elevator)); 
 
-    driver.povUp().whileTrue(new ClimberUp(Climber)); 
-    driver.povDown().whileTrue(new ClimberDown(Climber)); 
+    //driver.povUp().whileTrue(new ClimberUp(Climber)); 
+    //driver.povDown().whileTrue(new ClimberDown(Climber)); 
 
-    driver.rightTrigger().whileTrue(new WristUp(Wrist)); 
-    driver.leftTrigger().whileTrue(new WristDown(Wrist));
+    driver.povUp().whileTrue(new WristUp(Wrist)); 
+    driver.povDown().whileTrue(new WristDown(Wrist));
 
   }
 
@@ -210,19 +210,15 @@ public class RobotContainer {
     */
 
     //This will have to be changed to allow us to choose the path in the smart dashboard using a sendable chooser with autobuilder
-    return new PathPlannerAuto("testauto");
-/* 
-    try{
-      startingPose = PathPlannerAuto.getStaringPoseFromAutoFile(chooser.getSelected().getName());
-    } catch(Exception e){
-      System.out.println("Error Accessing Auto Pose From File");
-    }
-     startingPose = PathPlannerPath.
+    //return new PathPlannerAuto("testauto");
+ 
+
+    
     return new SequentialCommandGroup(
       new InstantCommand(() -> { m_robotDrive.zeroHeading(); m_robotDrive.resetOdometry(startingPose); m_robotDrive.setSide(redBlue.getSelected());}),
       chooser.getSelected()
     );
 
-    */
+    
   }
 }
