@@ -3,25 +3,57 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 7.062335526315788,
+        "y": 1.5907072368421051
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.982760666231963,
-        "y": 7.0
+        "x": 6.83872872856581,
+        "y": 1.7025106357170956
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.1457039613271065,
-        "y": 7.0
+        "x": 5.5132401315789465,
+        "y": 2.514391447368421
       },
       "prevControl": {
-        "x": 2.260504572131258,
-        "y": 7.0
+        "x": 5.590039709181352,
+        "y": 2.7646094260085143
+      },
+      "nextControl": {
+        "x": 5.214967105263157,
+        "y": 1.542598684210526
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.1834703947368421,
+        "y": 1.071134868421053
+      },
+      "prevControl": {
+        "x": 1.3751611348316712,
+        "y": 0.7452606102598434
+      },
+      "nextControl": {
+        "x": 0.7986019736842109,
+        "y": 1.7254111842105269
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.406085526315789,
+        "y": 2.6587171052631584
+      },
+      "prevControl": {
+        "x": 2.9057565789473685,
+        "y": 2.3412006578947366
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,8 +62,12 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
-      "rotationDegrees": -58.86164077523454
+      "waypointRelativePos": 1.081015719467962,
+      "rotationDegrees": -59.57844912573251
+    },
+    {
+      "waypointRelativePos": 1.9879081015719389,
+      "rotationDegrees": 53.43254475214917
     }
   ],
   "constraintZones": [],
@@ -47,7 +83,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -53.184068823750025
+    "rotation": 60.70863782901568
   },
   "reversed": false,
   "folder": null,

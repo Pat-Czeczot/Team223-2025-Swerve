@@ -1,22 +1,23 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Climber extends SubsystemBase {
+public class GroundCoral extends SubsystemBase {
     
-  SparkFlex Climber;
+  SparkMax GroundCoral;
  
 
-  public Climber() {
-    Climber = new SparkFlex(Constants.ClimberID, MotorType.kBrushless);
-    Climber.setInverted(true);
-    //Climber.burnFlash();
+  public GroundCoral() {
+    GroundCoral = new SparkMax(Constants.GroundCoralID, MotorType.kBrushless);
+    GroundCoral.setInverted(true);
+    //GroundCoral.burnFlash();
   }
     public void setSpeed(double speed){
-        Climber.set(speed);
+      GroundCoral.set(speed);
   }
   @Override
   public void periodic() {

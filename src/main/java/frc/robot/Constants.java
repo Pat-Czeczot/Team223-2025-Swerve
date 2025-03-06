@@ -49,12 +49,12 @@ public final class Constants {
     public static final int kFrontLeftDrivingCanId = 5;
     public static final int kRearLeftDrivingCanId = 7;
     public static final int kFrontRightDrivingCanId = 3;
-    public static final int kRearRightDrivingCanId = 1;
+    public static final int kRearRightDrivingCanId = 1; 
 
     public static final int kFrontLeftTurningCanId = 6;
     public static final int kRearLeftTurningCanId = 8;
     public static final int kFrontRightTurningCanId = 4;
-    public static final int kRearRightTurningCanId = 2;
+    public static final int kRearRightTurningCanId = 2; 
 
     public static final boolean kGyroReversed = false;
 
@@ -109,7 +109,8 @@ public static int leftflywheelID = 21;
 public static int rightflywheelID = 22;
 public static int motor1ID = 23;
 public static int motor2ID = 24;
-public static int ClimberID = 25;
+public static int CoralArmID = 25;
+public static int GroundCoralID = 27;
 public static int WristID = 26;
 
 
@@ -118,6 +119,7 @@ public static double algaeintakeMult = 1;
 public static double leftflywheelMult = 1;
 public static double rightflywheelMult = 1;
 public static double elevatorMult = 1;
-public static double ClimberMult = 1;
+public static double CoralArmMult = 0.3;
+public static double GroundCoralMult = 0.8;
 public static double WristMult = 0.5;
 }

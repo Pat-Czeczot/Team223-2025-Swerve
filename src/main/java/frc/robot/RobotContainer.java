@@ -45,7 +45,8 @@ import frc.robot.subsystems.AlgaeIntake;
 import frc.robot.subsystems.CoralIntake;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Wrist;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.CoralArm;
+import frc.robot.subsystems.GroundCoral;
 
 
 //Commands
@@ -55,8 +56,10 @@ import frc.robot.commands.Commands.CoralIntakeSpit;
 import frc.robot.commands.Commands.CoralIntakeSuck;
 import frc.robot.commands.Commands.ElevatorUp;
 import frc.robot.commands.Commands.ElevatorDown;
-import frc.robot.commands.Commands.ClimberUp;
-import frc.robot.commands.Commands.ClimberDown;
+import frc.robot.commands.Commands.CoralArmUp;
+import frc.robot.commands.Commands.CoralArmDown;
+import frc.robot.commands.Commands.GroundCoralSpit;
+import frc.robot.commands.Commands.GroundCoralSuck;
 import frc.robot.commands.Commands.WristUp;
 import frc.robot.commands.Commands.WristDown;
 
@@ -78,12 +81,21 @@ public class RobotContainer {
   private final CommandXboxController operator = new CommandXboxController(1);
 
 
+
+  public final Servo servo1 = new Servo(0);
+  
+  public final Servo servo2 = new Servo(1);
+
+  
+  
+
   /* Subsystems */
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   public final AlgaeIntake AlgaeIntake = new AlgaeIntake();
   public final CoralIntake CoralIntake = new CoralIntake();
   public final Elevator Elevator = new Elevator();
-  public final Climber Climber = new Climber();
+  public final CoralArm CoralArm = new CoralArm();
+  public final GroundCoral groundCoral = new GroundCoral();
   public final Wrist Wrist = new Wrist();
 
   /* Auto */
@@ -137,30 +149,41 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
+
+  
   private void configureButtonBindings() {
     new JoystickButton(m_driverController, Button.kR1.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-     driver.rightTrigger().whileTrue(new AlgaeIntakeSuck(AlgaeIntake)); 
-     driver.leftTrigger().whileTrue(new AlgaeIntakeSpit(AlgaeIntake));  
+     operator.rightBumper().whileTrue(new AlgaeIntakeSuck(AlgaeIntake)); 
+     operator.leftBumper().whileTrue(new AlgaeIntakeSpit(AlgaeIntake));  
            
     //driver.y().toggleOnTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive)); //Change this slightly to reset gyro when driving
 
-    driver.a().whileTrue(new CoralIntakeSuck(CoralIntake)); 
-    driver.b().whileTrue(new CoralIntakeSpit(CoralIntake)); 
+    operator.leftTrigger().whileTrue(new CoralIntakeSuck(CoralIntake)); 
+    operator.rightTrigger().whileTrue(new CoralIntakeSpit(CoralIntake)); 
 
-    driver.x().whileTrue(new ElevatorUp(Elevator)); 
-    driver.y().whileTrue(new ElevatorDown(Elevator)); 
+    operator.leftStick().whileTrue(new ElevatorUp(Elevator)); 
+    operator.leftStick().whileTrue(new ElevatorDown(Elevator)); 
 
-    //driver.povUp().whileTrue(new ClimberUp(Climber)); 
-    //driver.povDown().whileTrue(new ClimberDown(Climber)); 
+    driver.a().whileTrue(new GroundCoralSpit(groundCoral)); 
+    driver.b().whileTrue(new GroundCoralSuck(groundCoral)); 
 
-    driver.povUp().whileTrue(new WristUp(Wrist)); 
-    driver.povDown().whileTrue(new WristDown(Wrist));
+    driver.x().whileTrue(new CoralArmUp(CoralArm)); 
+    driver.y().whileTrue(new CoralArmDown(CoralArm)); 
 
+    operator.rightStick().whileTrue(new WristUp(Wrist)); 
+    operator.rightStick().whileTrue(new WristDown(Wrist));
+
+    driver.povDown().whileTrue(new InstantCommand(() -> {servo1.set(0.140); System.out.println(servo1.getPosition());}));
+    driver.povUp().whileTrue(new InstantCommand(() -> {servo1.set(0.45); System.out.println(servo1.getPosition());}));
+    driver.povDown().whileTrue(new InstantCommand(() -> {servo2.set(0.705); System.out.println(servo2.getPosition());}));
+    driver.povUp().whileTrue(new InstantCommand(() -> {servo2.set(0.385); System.out.println(servo2.getPosition());}));
   }
+
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

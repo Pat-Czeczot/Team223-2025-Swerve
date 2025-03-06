@@ -1,30 +1,30 @@
 package frc.robot.commands.Commands;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.CoralArm;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ClimberDown extends Command {
+public class CoralArmDown extends Command {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private Climber Climber;
+  private CoralArm CoralArm;
   
 
-  public ClimberDown(Climber subsystem1) {
-    Climber = subsystem1;
+  public CoralArmDown(CoralArm subsystem1) {
+    CoralArm = subsystem1;
     addRequirements(subsystem1);
 }
 @Override
   public void initialize() {
-    Climber.setSpeed(-1 * Constants.ClimberMult);
+    CoralArm.setSpeed(-1 * Constants.CoralArmMult);
     }
 
   @Override
   public void execute() {
-    Climber.setSpeed(-1 * Constants.ClimberMult);
+    CoralArm.setSpeed(-1 * Constants.CoralArmMult);
   }
   @Override
   public void end(boolean interrupted) {
-    Climber.setSpeed(0);
+    CoralArm.setSpeed(0);
 
   }
   @Override
