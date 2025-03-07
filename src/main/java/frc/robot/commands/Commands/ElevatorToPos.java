@@ -4,11 +4,11 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ElevatorUp extends Command {
+public class ElevatorToPos extends Command {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private Elevator elevator;
 
-  public ElevatorUp(Elevator subsystem1) {
+  public ElevatorToPos(Elevator subsystem1) {
     elevator = subsystem1;
     addRequirements(subsystem1);
     

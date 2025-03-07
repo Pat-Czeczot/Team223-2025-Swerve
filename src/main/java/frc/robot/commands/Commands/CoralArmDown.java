@@ -12,7 +12,7 @@ public class CoralArmDown extends Command {
   public CoralArmDown(CoralArm subsystem1) {
     CoralArm = subsystem1;
     addRequirements(subsystem1);
-}
+  }
 @Override
   public void initialize() {
     CoralArm.setSpeed(-1 * Constants.CoralArmMult);

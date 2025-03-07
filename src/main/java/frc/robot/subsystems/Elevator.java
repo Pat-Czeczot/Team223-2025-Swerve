@@ -33,9 +33,9 @@ public class Elevator extends SubsystemBase {
       //motor2.burnFlash();
       //10.4
     }
-      public void setSpeed(double speed){
-        System.out.println(encoder.getPosition());
-        System.out.println(!highSensor.get());
+    public void setSpeed(double speed){
+        //System.out.println(encoder.getPosition());
+        //System.out.println(!highSensor.get());
         
 
         if (speed < 0 && !lowSensor.get()) 
@@ -61,18 +61,24 @@ public class Elevator extends SubsystemBase {
           motor1.set(speed);
           motor2.set(speed);
         }
+    }
+    public void moveTo(int pos) {
+/* 
+      double[] positions = {};
 
-
-
-
-
-
-
-
-
-
-
-        
+      switch (pos) {
+        case 1:
+        if (encoder.getPosition() > )
+        break;
+        case 2:
+        break;
+        case 3:
+        break;
+        case 4:
+        setSpeed(1 * Constants.elevatorMult);
+        break;
+      }
+      */
     }
     @Override
     public void periodic() {

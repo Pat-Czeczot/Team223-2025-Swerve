@@ -1,17 +1,20 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class CoralArm extends SubsystemBase {
     
-  SparkFlex CoralArm;
+  //SparkFlex CoralArm;
+  SparkMax CoralArm;
  
 
   public CoralArm() {
-    CoralArm = new SparkFlex(Constants.CoralArmID, MotorType.kBrushless);
+    //CoralArm = new SparkFlex(Constants.CoralArmID, MotorType.kBrushless);
+    CoralArm = new SparkMax(Constants.CoralArmID, MotorType.kBrushless);
     CoralArm.setInverted(true);
     //CoralArm.burnFlash();
   }

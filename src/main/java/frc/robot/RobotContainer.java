@@ -16,7 +16,11 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.Servo;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -27,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -87,7 +92,10 @@ public class RobotContainer {
   public final Servo servo2 = new Servo(1);
 
   
-  
+  public static AddressableLED LEDS = new AddressableLED(2);
+  public static AddressableLEDBuffer LEDDefaultBuffer;
+  public static AddressableLEDBuffer LEDIndexBuffer;
+  public static AddressableLEDBuffer LEDLimelightBuffer;
 
   /* Subsystems */
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
@@ -113,6 +121,7 @@ public class RobotContainer {
 
     Map<String,Command> namedCommands = new HashMap<String,Command>();
     namedCommands.put("print test", new InstantCommand(() -> {System.out.println("Test Auto Works");}));
+    namedCommands.put("coralArm", new SequentialCommandGroup(new CoralArmDown(CoralArm).withTimeout(0.4), new WaitCommand(0.3), new GroundCoralSpit(groundCoral).withTimeout(1)));
     NamedCommands.registerCommands(namedCommands);
     redBlue = new SendableChooser<String>();
     redBlue.addOption("red", "red");
@@ -137,7 +146,38 @@ public class RobotContainer {
                 true),
             m_robotDrive)
             );
-           
+
+    
+    //LED SET UP CODE
+    LEDS.setLength(159);
+    LEDDefaultBuffer = new AddressableLEDBuffer(159);
+    LEDPattern red = LEDPattern.solid(Color.kDarkGreen);
+    red.applyTo(LEDDefaultBuffer);
+    LEDS.setData(LEDDefaultBuffer);
+    /*
+    LEDDefaultBuffer = new AddressableLEDBuffer(159);
+    LEDIndexBuffer = new AddressableLEDBuffer(159);
+    LEDLimelightBuffer = new AddressableLEDBuffer(159);
+    for (int i = 0; i < 159; i++)
+    {
+        //GRB!!!
+        LEDIndexBuffer.setRGB(i, 225, 255, 0);
+    }
+    for (int i = 0; i < 159; i++)
+    {
+        //GRB!!!
+        LEDDefaultBuffer.setRGB(i, 0, 0, 0);
+    }
+    for (int i = 0; i < 159; i++)
+    {
+        //GRB!!!
+        LEDLimelightBuffer.setRGB(i, 255, 0, 0);
+    }
+    */
+    LEDS.start();
+    LEDS.setData(LEDDefaultBuffer);
+      
+      
   }        
 
   /**
@@ -152,35 +192,53 @@ public class RobotContainer {
 
   
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
+    /*
+    new JoystickButton(m_driverController, Button.kStart.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+    */
 
      operator.rightBumper().whileTrue(new AlgaeIntakeSuck(AlgaeIntake)); 
      operator.leftBumper().whileTrue(new AlgaeIntakeSpit(AlgaeIntake));  
            
-    //driver.y().toggleOnTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive)); //Change this slightly to reset gyro when driving
+    driver.y().toggleOnTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive)); //Change this slightly to reset gyro when driving
 
     operator.leftTrigger().whileTrue(new CoralIntakeSuck(CoralIntake)); 
     operator.rightTrigger().whileTrue(new CoralIntakeSpit(CoralIntake)); 
 
-    operator.leftStick().whileTrue(new ElevatorUp(Elevator)); 
-    operator.leftStick().whileTrue(new ElevatorDown(Elevator)); 
+    //operator.y().whileTrue(new ElevatorUp(Elevator)); 
+    //operator.x().whileTrue(new ElevatorDown(Elevator));
 
-    driver.a().whileTrue(new GroundCoralSpit(groundCoral)); 
-    driver.b().whileTrue(new GroundCoralSuck(groundCoral)); 
+    operator.axisLessThan(XboxController.Axis.kLeftY.value, -0.15).whileTrue(new ElevatorUp(Elevator));
+    operator.axisGreaterThan(XboxController.Axis.kLeftY.value, 0.15).whileTrue(new ElevatorDown(Elevator));
 
-    driver.x().whileTrue(new CoralArmUp(CoralArm)); 
-    driver.y().whileTrue(new CoralArmDown(CoralArm)); 
+    operator.axisLessThan(XboxController.Axis.kRightY.value, -0.15).whileTrue(new WristUp(Wrist));
+    operator.axisGreaterThan(XboxController.Axis.kRightY.value, 0.15).whileTrue(new WristDown(Wrist));
 
-    operator.rightStick().whileTrue(new WristUp(Wrist)); 
-    operator.rightStick().whileTrue(new WristDown(Wrist));
 
-    driver.povDown().whileTrue(new InstantCommand(() -> {servo1.set(0.140); System.out.println(servo1.getPosition());}));
-    driver.povUp().whileTrue(new InstantCommand(() -> {servo1.set(0.45); System.out.println(servo1.getPosition());}));
-    driver.povDown().whileTrue(new InstantCommand(() -> {servo2.set(0.705); System.out.println(servo2.getPosition());}));
-    driver.povUp().whileTrue(new InstantCommand(() -> {servo2.set(0.385); System.out.println(servo2.getPosition());}));
+    driver.rightBumper().whileTrue(new GroundCoralSpit(groundCoral)); 
+    driver.leftBumper().whileTrue(new GroundCoralSuck(groundCoral)); 
+
+    driver.rightTrigger().whileTrue(new CoralArmUp(CoralArm)); 
+    driver.leftTrigger().whileTrue(new CoralArmDown(CoralArm)); 
+
+    //operator.b().whileTrue(new WristUp(Wrist)); 
+    //operator.a().whileTrue(new WristDown(Wrist));
+
+    driver.b().whileTrue(new InstantCommand(() -> {servo1.set(0.140); System.out.println(servo1.getPosition());}));
+    driver.a().whileTrue(new InstantCommand(() -> {servo1.set(0.45); System.out.println(servo1.getPosition());}));
+    driver.b().whileTrue(new InstantCommand(() -> {servo2.set(0.705); System.out.println(servo2.getPosition());}));
+    driver.a().whileTrue(new InstantCommand(() -> {servo2.set(0.385); System.out.println(servo2.getPosition());}));
+
+    driver.x().whileTrue(new RunCommand(
+      () -> m_robotDrive.drive(
+          -MathUtil.applyDeadband(driver.getLeftY() * 0.2, OIConstants.kDriveDeadband), //left stick 
+          -MathUtil.applyDeadband(driver.getLeftX() * 0.2, OIConstants.kDriveDeadband), //left stick 
+          -MathUtil.applyDeadband(driver.getRightX() * 0.2, OIConstants.kDriveDeadband), //right stick
+          true),
+      m_robotDrive)
+      );
   }
 
 
@@ -236,11 +294,19 @@ public class RobotContainer {
     //return new PathPlannerAuto("testauto");
  
 
-    
+    /* 
     return new SequentialCommandGroup(
-      new InstantCommand(() -> { m_robotDrive.zeroHeading(); m_robotDrive.resetOdometry(startingPose); m_robotDrive.setSide(redBlue.getSelected());}),
+      new InstantCommand(() -> { m_robotDrive.zeroHeading(); m_robotDrive.resetOdometry(m_robotDrive.getPose()); m_robotDrive.setSide(redBlue.getSelected());}),
       chooser.getSelected()
     );
+    */
+
+    m_robotDrive.zeroHeading();
+    m_robotDrive.resetOdometry(m_robotDrive.getPose());
+    m_robotDrive.setSide(redBlue.getSelected());
+    return chooser.getSelected();
+
+    
 
     
   }

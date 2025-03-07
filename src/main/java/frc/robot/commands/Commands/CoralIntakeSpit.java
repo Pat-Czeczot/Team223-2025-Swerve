@@ -6,12 +6,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class CoralIntakeSpit extends Command {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private CoralIntake leftflywheel;
-  private CoralIntake rightflywheel;
+  private CoralIntake coralIntake;
 
   public CoralIntakeSpit(CoralIntake subsystem1) {
-    leftflywheel = subsystem1;
-    rightflywheel = subsystem1;
+    coralIntake = subsystem1;
     addRequirements(subsystem1);
     
 }
@@ -21,13 +19,13 @@ public class CoralIntakeSpit extends Command {
 
   @Override
   public void execute() {
-    leftflywheel.setSpeed(1 * Constants.leftflywheelMult);
-    rightflywheel.setSpeed(1 * Constants.rightflywheelMult);
+    coralIntake.setSpeed(1 * Constants.leftflywheelMult);
+    
   }
   @Override
   public void end(boolean interrupted) {
-    leftflywheel.setSpeed(0);
-    rightflywheel.setSpeed(0);
+    coralIntake.setSpeed(0);
+    
 
   }
   @Override

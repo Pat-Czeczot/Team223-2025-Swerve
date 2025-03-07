@@ -17,6 +17,9 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.utils.SwerveUtils;
 import pabeles.concurrency.ConcurrencyOps.NewInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
@@ -73,6 +76,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   private boolean isPathFlipped = false;
 
+  private SysIdRoutine r1 = new SysIdRoutine(new Config(), 
+    new Mechanism(null, null, this)
+  );
+
   // Create a new DriveSubsystem
   public DriveSubsystem() {
     anglePIDController.enableContinuousInput(-180, 180);
@@ -86,11 +93,11 @@ public class DriveSubsystem extends SubsystemBase {
       this::getRobotRelativeSpeeds, 
       (speeds, feedforwards) -> setChassisSpeeds(speeds), //we can change this to use feedforward information but it is not necessary 
       new PPHolonomicDriveController( // YOU WILL HAVE TO TUNE THESE VALUES ALONG WITH THE OTHER PID VALUES USING SYSID for 2025, THESE ARE ONLY TEMP DEFAULTS
-        new PIDConstants(0.04, 0.0, 0.0), // Translation PID constants
-        new PIDConstants(1, 0.0, 0.0) // Rotation PID constants
+        new PIDConstants(0.027, 0.001, 0.001), // Translation PID constants
+        new PIDConstants(0.05, 0.0053, 0.001) // Rotation PID constants
       ),
       new RobotConfig( //YOU WILL HAVE TO CALCULATE ALL OF THESE VARIABLES WHENEVER THE ROBOT SIGNIFICANTLY CHANGES, THESE ARE ONLY TEMP DEFAULTS
-        20.0, //mass, kg
+        52.0, //mass, kg
         4.0, //moment of intertia, kg*m^2
         new ModuleConfig(//CALCULATE THESE TOO
         0.0381, //wheel radius, meters (assuming our wheels have a 3 in diameter, double check for yourself)
@@ -108,10 +115,10 @@ public class DriveSubsystem extends SubsystemBase {
         80.0, //current limit of the drive motor, amps, this seems way too high for the robot but its what i found on rev but ask around
         1 //num of drive motors, we only have one bc swerve
         ), 
-        new Translation2d(-0.5969, 0.5969), //offset of each module from center of robot in (x meters component,  y meters component) KEEP THE SIGNS, please calculate this im guessing baced on the 25 x 25in frame, front left
-        new Translation2d(0.5969, 0.5969), //front right
-        new Translation2d(-0.5969, -0.5969), //rear left
-        new Translation2d(0.5969, -0.5969) //rear right
+        new Translation2d(-0.29845, 0.36830), //offset of each module from center of robot in (x meters component,  y meters component) KEEP THE SIGNS, please calculate this im guessing baced on the 25 x 25in frame, front left
+        new Translation2d(0.29845, 0.36830), //front right
+        new Translation2d(-0.29845, -0.36830), //rear left
+        new Translation2d(0.29845, -0.36830) //rear right
       ),
       this::flipPathToRedSide, //CHANGE THIS FUNCTION AS SPECIFIED BY ITS FUNCTION DEFINITON
       this
