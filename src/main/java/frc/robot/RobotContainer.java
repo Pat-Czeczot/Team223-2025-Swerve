@@ -226,10 +226,10 @@ public class RobotContainer {
     //operator.b().whileTrue(new WristUp(Wrist)); 
     //operator.a().whileTrue(new WristDown(Wrist));
 
-    driver.b().whileTrue(new InstantCommand(() -> {servo1.set(0.140); System.out.println(servo1.getPosition());}));
-    driver.a().whileTrue(new InstantCommand(() -> {servo1.set(0.45); System.out.println(servo1.getPosition());}));
-    driver.b().whileTrue(new InstantCommand(() -> {servo2.set(0.705); System.out.println(servo2.getPosition());}));
-    driver.a().whileTrue(new InstantCommand(() -> {servo2.set(0.385); System.out.println(servo2.getPosition());}));
+    driver.b().whileTrue(new InstantCommand(() -> {servo1.set(0.140);})); //System.out.println(servo1.getPosition()
+    driver.a().whileTrue(new InstantCommand(() -> {servo1.set(0.45);}));
+    driver.b().whileTrue(new InstantCommand(() -> {servo2.set(0.705);})); //System.out.println(servo2.getPosition())
+    driver.a().whileTrue(new InstantCommand(() -> {servo2.set(0.385);}));
 
     driver.x().whileTrue(new RunCommand(
       () -> m_robotDrive.drive(
