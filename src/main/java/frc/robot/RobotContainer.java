@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.Servo;
@@ -61,6 +62,7 @@ import frc.robot.commands.Commands.CoralIntakeSpit;
 import frc.robot.commands.Commands.CoralIntakeSuck;
 import frc.robot.commands.Commands.ElevatorUp;
 import frc.robot.commands.Commands.ElevatorDown;
+import frc.robot.commands.Commands.ElevatorToPos;
 import frc.robot.commands.Commands.CoralArmUp;
 import frc.robot.commands.Commands.CoralArmDown;
 import frc.robot.commands.Commands.GroundCoralSpit;
@@ -122,6 +124,7 @@ public class RobotContainer {
     Map<String,Command> namedCommands = new HashMap<String,Command>();
     namedCommands.put("print test", new InstantCommand(() -> {System.out.println("Test Auto Works");}));
     namedCommands.put("coralArm", new SequentialCommandGroup(new CoralArmDown(CoralArm).withTimeout(0.4), new WaitCommand(0.3), new GroundCoralSpit(groundCoral).withTimeout(1)));
+    //namedCommands.put("lockServo", new SequentialCommandGroup(new InstantCommand(() -> {servo1.set(0.56); servo2.set(0.365);})));
     NamedCommands.registerCommands(namedCommands);
     redBlue = new SendableChooser<String>();
     redBlue.addOption("red", "red");
@@ -151,8 +154,11 @@ public class RobotContainer {
     //LED SET UP CODE
     LEDS.setLength(159);
     LEDDefaultBuffer = new AddressableLEDBuffer(159);
+    LEDIndexBuffer = new AddressableLEDBuffer(159);
     LEDPattern red = LEDPattern.solid(Color.kDarkGreen);
+    LEDPattern green = LEDPattern.solid(Color.kOrange);
     red.applyTo(LEDDefaultBuffer);
+    green.applyTo(LEDIndexBuffer);
     LEDS.setData(LEDDefaultBuffer);
     /*
     LEDDefaultBuffer = new AddressableLEDBuffer(159);
@@ -202,13 +208,10 @@ public class RobotContainer {
      operator.rightBumper().whileTrue(new AlgaeIntakeSuck(AlgaeIntake)); 
      operator.leftBumper().whileTrue(new AlgaeIntakeSpit(AlgaeIntake));  
            
-    driver.y().toggleOnTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive)); //Change this slightly to reset gyro when driving
+    driver.y().whileTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive)); //Change this slightly to reset gyro when driving
 
     operator.leftTrigger().whileTrue(new CoralIntakeSuck(CoralIntake)); 
     operator.rightTrigger().whileTrue(new CoralIntakeSpit(CoralIntake)); 
-
-    //operator.y().whileTrue(new ElevatorUp(Elevator)); 
-    //operator.x().whileTrue(new ElevatorDown(Elevator));
 
     operator.axisLessThan(XboxController.Axis.kLeftY.value, -0.15).whileTrue(new ElevatorUp(Elevator));
     operator.axisGreaterThan(XboxController.Axis.kLeftY.value, 0.15).whileTrue(new ElevatorDown(Elevator));
@@ -216,20 +219,31 @@ public class RobotContainer {
     operator.axisLessThan(XboxController.Axis.kRightY.value, -0.15).whileTrue(new WristUp(Wrist));
     operator.axisGreaterThan(XboxController.Axis.kRightY.value, 0.15).whileTrue(new WristDown(Wrist));
 
+    driver.leftTrigger().whileTrue(new GroundCoralSpit(groundCoral)); 
+    driver.rightTrigger().whileTrue(new GroundCoralSuck(groundCoral)); 
 
-    driver.rightBumper().whileTrue(new GroundCoralSpit(groundCoral)); 
-    driver.leftBumper().whileTrue(new GroundCoralSuck(groundCoral)); 
+    driver.leftBumper().whileTrue(new CoralArmUp(CoralArm)); 
+    driver.rightBumper().whileTrue(new CoralArmDown(CoralArm)); 
 
-    driver.rightTrigger().whileTrue(new CoralArmUp(CoralArm)); 
-    driver.leftTrigger().whileTrue(new CoralArmDown(CoralArm)); 
+    operator.x().whileTrue(new ElevatorToPos(Elevator, 1));
+    operator.a().whileTrue(new ElevatorToPos(Elevator, 2));
+    operator.b().whileTrue(new ElevatorToPos(Elevator, 3));
+    operator.y().whileTrue(new ElevatorToPos(Elevator, 4));
+
+
+    //operator.y().whileTrue(new ElevatorUp(Elevator)); 
+    //operator.x().whileTrue(new ElevatorDown(Elevator));
 
     //operator.b().whileTrue(new WristUp(Wrist)); 
     //operator.a().whileTrue(new WristDown(Wrist));
 
-    driver.b().whileTrue(new InstantCommand(() -> {servo1.set(0.140);})); //System.out.println(servo1.getPosition()
-    driver.a().whileTrue(new InstantCommand(() -> {servo1.set(0.45);}));
-    driver.b().whileTrue(new InstantCommand(() -> {servo2.set(0.705);})); //System.out.println(servo2.getPosition())
-    driver.a().whileTrue(new InstantCommand(() -> {servo2.set(0.385);}));
+    //a = servo up
+    //b = servp down
+   // driver.b().whileTrue(new InstantCommand(() -> {servo1.set(0.140);})); //System.out.println(servo1.getPosition()      lesser value equals servo lower
+    //driver.a().whileTrue(new InstantCommand(() -> {servo1.set(0.56);}));                          greater value equals servo higher
+    //driver.b().whileTrue(new InstantCommand(() -> {servo2.set(0.705);})); //System.out.println(servo2.getPosition())      greater value equals servo higher
+    //driver.a().whileTrue(new InstantCommand(() -> {servo2.set(0.365                               lesser value equals servo higher
+      //  );}));
 
     driver.x().whileTrue(new RunCommand(
       () -> m_robotDrive.drive(
@@ -241,7 +255,14 @@ public class RobotContainer {
       );
   }
 
-
+  public static void updateLEDS(boolean isAligned) {
+    if (isAligned) {
+        LEDS.setData(LEDIndexBuffer);
+    }
+    else {
+        LEDS.setData(LEDDefaultBuffer);
+    }
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -304,6 +325,7 @@ public class RobotContainer {
     m_robotDrive.zeroHeading();
     m_robotDrive.resetOdometry(m_robotDrive.getPose());
     m_robotDrive.setSide(redBlue.getSelected());
+    //System.out.println(DriverStation.getAlliance());
     return chooser.getSelected();
 
     

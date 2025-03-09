@@ -34,7 +34,7 @@ public class Elevator extends SubsystemBase {
       //10.4
     }
     public void setSpeed(double speed){
-        //System.out.println(encoder.getPosition());
+        System.out.println(encoder.getPosition());
         //System.out.println(!highSensor.get());
         
 
@@ -63,22 +63,22 @@ public class Elevator extends SubsystemBase {
         }
     }
     public void moveTo(int pos) {
-/* 
-      double[] positions = {};
+      int index = pos - 1;
+      double[] positions = {1.0, 2.9, 5.2, 9.9};
 
-      switch (pos) {
-        case 1:
-        if (encoder.getPosition() > )
-        break;
-        case 2:
-        break;
-        case 3:
-        break;
-        case 4:
-        setSpeed(1 * Constants.elevatorMult);
-        break;
+      if (positions[index] - encoder.getPosition() > 0.08)
+      {
+        setSpeed(1);
       }
-      */
+      else if (encoder.getPosition() - positions[index] > 0.08)
+      {
+        setSpeed(-1);
+      }
+      else
+      {
+        setSpeed(0);
+      }
+      
     }
     @Override
     public void periodic() {
