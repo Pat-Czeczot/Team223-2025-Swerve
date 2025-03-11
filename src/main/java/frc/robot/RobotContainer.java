@@ -110,7 +110,6 @@ public class RobotContainer {
 
   /* Auto */
   private final SendableChooser<Command> chooser;
-  private final SendableChooser<String> redBlue;
   public Pose2d startingPose;
   
 
@@ -126,12 +125,8 @@ public class RobotContainer {
     namedCommands.put("coralArm", new SequentialCommandGroup(new CoralArmDown(CoralArm).withTimeout(0.4), new WaitCommand(0.3), new GroundCoralSpit(groundCoral).withTimeout(1)));
     //namedCommands.put("lockServo", new SequentialCommandGroup(new InstantCommand(() -> {servo1.set(0.56); servo2.set(0.365);})));
     NamedCommands.registerCommands(namedCommands);
-    redBlue = new SendableChooser<String>();
-    redBlue.addOption("red", "red");
-    redBlue.addOption("blue", "blue");
     chooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto:", chooser);
-    SmartDashboard.putData("Side:", redBlue);
 
 
     // Configure the button bindings
@@ -324,8 +319,6 @@ public class RobotContainer {
 
     m_robotDrive.zeroHeading();
     m_robotDrive.resetOdometry(m_robotDrive.getPose());
-    m_robotDrive.setSide(redBlue.getSelected());
-    //System.out.println(DriverStation.getAlliance());
     return chooser.getSelected();
 
     

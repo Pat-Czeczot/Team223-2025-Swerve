@@ -12,6 +12,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.utils.SwerveUtils;
@@ -20,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
+
+import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
@@ -120,24 +124,18 @@ public class DriveSubsystem extends SubsystemBase {
         new Translation2d(-0.29845, -0.36830), //rear left
         new Translation2d(0.29845, -0.36830) //rear right
       ),
-      this::flipPathToRedSide, //CHANGE THIS FUNCTION AS SPECIFIED BY ITS FUNCTION DEFINITON
+      () -> {
+        Optional<Alliance> alliance = DriverStation.getAlliance();
+        if (alliance.isPresent())
+        {
+          return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false; //makes the path default to blue side if it cant determine a side
+      },
       this
       );
   }
 
-  //IMPORTANT!!!!! CHANGE THIS FUNCTION LATER ON TO ACCEPT INPUT FROM SMARTDASHBORD AND RETURN TRUE IF YOU ARE ON RED SIDE AND RETURN FALSE IF YOU ARE ON BLUE SIDE
-  public boolean flipPathToRedSide(){ 
-    return isPathFlipped;
-  }
-
-  public void setSide(String redBlue){
-    if(redBlue.equals("red")){
-      isPathFlipped = true;
-    }else{
-      isPathFlipped = false;
-    }
-    
-  }
 
   // Return the currently-estimated pose of the robot
   public Pose2d getPose() {

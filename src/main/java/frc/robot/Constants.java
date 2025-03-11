@@ -103,6 +103,18 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+/* Drive Motor IDs */
+// FrontLeftDrivingCanId = 5;
+// RearLeftDrivingCanId = 7;
+// FrontRightDrivingCanId = 3;
+// RearRightDrivingCanId = 1; 
+
+// FrontLeftTurningCanId = 6;
+// RearLeftTurningCanId = 8;
+// FrontRightTurningCanId = 4;
+// RearRightTurningCanId = 2; 
+
+
 /* Motor IDs */
 public static int algaeintakeID = 20;
 public static int leftflywheelID = 21;
