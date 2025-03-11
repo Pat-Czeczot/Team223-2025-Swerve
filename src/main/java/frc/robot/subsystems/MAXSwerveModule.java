@@ -21,11 +21,11 @@ import com.revrobotics.RelativeEncoder;
 import frc.robot.Configs; 
 
 public class MAXSwerveModule {
-  private final SparkFlex m_drivingSpark; // 
-  private final SparkMax m_turningSpark; 
+  public final SparkFlex m_drivingSpark; // 
+  public final SparkMax m_turningSpark; 
 
-  private final RelativeEncoder m_drivingEncoder;
-  private final AbsoluteEncoder m_turningEncoder;
+  public final RelativeEncoder m_drivingEncoder;
+  public final AbsoluteEncoder m_turningEncoder;
 
   private final SparkClosedLoopController m_drivingClosedLoopController;
   private final SparkClosedLoopController m_turningClosedLoopController;
@@ -112,6 +112,10 @@ public class MAXSwerveModule {
 
     m_desiredState = desiredState;
   }
+
+  public double getDriveVolts() {
+        return (m_drivingSpark.getAppliedOutput() * m_drivingSpark.getBusVoltage());
+    }
 
   /** Zeroes all the SwerveModule encoders. */
   public void resetEncoders() {
