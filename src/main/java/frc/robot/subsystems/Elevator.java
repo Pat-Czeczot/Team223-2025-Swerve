@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -16,7 +17,7 @@ public class Elevator extends SubsystemBase {
     private DigitalInput lowSensor;
     private DigitalInput highSensor;
     private RelativeEncoder encoder;
-    
+    private PIDController elevatorPID;
 
 
     public Elevator() {
@@ -24,6 +25,8 @@ public class Elevator extends SubsystemBase {
         motor2 = new SparkFlex(Constants.motor2ID, MotorType.kBrushless);
         encoder = motor1.getExternalEncoder();
         encoder.setPosition(0);
+      
+        
 
         lowSensor = new DigitalInput(0); //Port 0 DIO
         highSensor = new DigitalInput(1); //Port 1 DIO

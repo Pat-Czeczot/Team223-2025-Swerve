@@ -37,7 +37,7 @@ public class DrivetrainRoutine {
                 voltage -> {
                     //drivetrain.setModulesToZeroRadPID(); //Sets the rotational pid to zero, prob not needed
                     drivetrain.m_frontLeft.m_drivingSpark.setVoltage(voltage.in(Volts));
-                    drivetrain.m_frontRight.m_drivingSPark.setVoltage(voltage.in(Volts));
+                    drivetrain.m_frontRight.m_drivingSpark.setVoltage(voltage.in(Volts));
                     drivetrain.m_rearLeft.m_drivingSpark.setVoltage(voltage.in(Volts));
                     drivetrain.m_rearRight.m_drivingSpark.setVoltage(voltage.in(Volts));
                 }, 

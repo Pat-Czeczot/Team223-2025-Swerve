@@ -97,8 +97,8 @@ public class DriveSubsystem extends SubsystemBase {
       this::getRobotRelativeSpeeds, 
       (speeds, feedforwards) -> setChassisSpeeds(speeds), //we can change this to use feedforward information but it is not necessary 
       new PPHolonomicDriveController( // YOU WILL HAVE TO TUNE THESE VALUES ALONG WITH THE OTHER PID VALUES USING SYSID for 2025, THESE ARE ONLY TEMP DEFAULTS
-        new PIDConstants(0.027, 0.001, 0.001), // Translation PID constants
-        new PIDConstants(0.05, 0.0053, 0.001) // Rotation PID constants
+        new PIDConstants(0.10187, 0.0, 0.0), // Translation PID constants
+        new PIDConstants(0.0, 0.0, 0.0) // Rotation PID constants
       ),
       new RobotConfig( //YOU WILL HAVE TO CALCULATE ALL OF THESE VARIABLES WHENEVER THE ROBOT SIGNIFICANTLY CHANGES, THESE ARE ONLY TEMP DEFAULTS
         52.0, //mass, kg
