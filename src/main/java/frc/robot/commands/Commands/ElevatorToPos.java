@@ -7,21 +7,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ElevatorToPos extends Command {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private Elevator elevator;
-  private int position;
+  private double position;
 
-  public ElevatorToPos(Elevator subsystem1, int pos) {
+  public ElevatorToPos(Elevator subsystem1, double pos) {
     elevator = subsystem1;
     position = pos;
     addRequirements(subsystem1);
     
 }
 @Override
-  public void initialize() {
-    }
+public void initialize() {
+  elevator.moveTo(position);
+}
 
-  @Override
+@Override
   public void execute() {
-    elevator.moveTo(position);
   }
   @Override
   public void end(boolean interrupted) {
@@ -30,6 +30,6 @@ public class ElevatorToPos extends Command {
   }
   @Override
   public boolean isFinished() {
-    return false;
+    return elevator.isAtPosition();
   }
 }

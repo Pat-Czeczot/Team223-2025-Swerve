@@ -221,10 +221,10 @@ public class RobotContainer {
     driver.leftBumper().whileTrue(new CoralArmUp(CoralArm)); 
     driver.rightBumper().whileTrue(new CoralArmDown(CoralArm)); 
 
-    operator.x().whileTrue(new ElevatorToPos(Elevator, 1));
-    operator.a().whileTrue(new ElevatorToPos(Elevator, 2));
-    operator.b().whileTrue(new ElevatorToPos(Elevator, 3));
-    operator.y().whileTrue(new ElevatorToPos(Elevator, 4));
+    operator.x().toggleOnTrue(new ElevatorToPos(Elevator, 1.0));
+    operator.a().toggleOnTrue(new ElevatorToPos(Elevator, 2.9));
+    operator.b().toggleOnTrue(new ElevatorToPos(Elevator, 5.2));
+    operator.y().toggleOnTrue(new ElevatorToPos(Elevator, 9.9));
 
     /* SYSID CONTROLLS FOR CONTROLLER 3 (port 2) */ //COMMENT OUT AFTER DONE WITH SYSID
     sysid.a().whileTrue(m_robotDrive.routine.quasistaticForward());
