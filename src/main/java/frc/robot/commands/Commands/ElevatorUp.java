@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ElevatorUp extends Command {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private Elevator elevator;
-  //private double stickPos;
+  private double stickPos;
 
 
-  public ElevatorUp(Elevator subsystem1 ){ //, double stickPos) {
+  public ElevatorUp(Elevator subsystem1){ //, double stickPos) {
     elevator = subsystem1;
-  //  this.stickPos = stickPos;
+    //this.stickPos = stickPos;
     addRequirements(subsystem1);
     
 }

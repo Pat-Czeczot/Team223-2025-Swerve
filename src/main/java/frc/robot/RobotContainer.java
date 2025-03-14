@@ -86,7 +86,7 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
-  private final CommandXboxController sysid = new CommandXboxController(2); //COMMENT THIS OUT WHEN YOU ARE DONE WITH SYSID
+  //private final CommandXboxController sysid = new CommandXboxController(2); //COMMENT THIS OUT WHEN YOU ARE DONE WITH SYSID
 
 
 
@@ -221,16 +221,16 @@ public class RobotContainer {
     driver.leftBumper().whileTrue(new CoralArmUp(CoralArm)); 
     driver.rightBumper().whileTrue(new CoralArmDown(CoralArm)); 
 
-    operator.x().toggleOnTrue(new ElevatorToPos(Elevator, 1.0));
-    operator.a().toggleOnTrue(new ElevatorToPos(Elevator, 2.9));
-    operator.b().toggleOnTrue(new ElevatorToPos(Elevator, 5.2));
-    operator.y().toggleOnTrue(new ElevatorToPos(Elevator, 9.9));
+    operator.x().whileTrue(new ElevatorToPos(Elevator, 1));
+    operator.a().whileTrue(new ElevatorToPos(Elevator, 2));
+    operator.b().whileTrue(new ElevatorToPos(Elevator, 3));
+    operator.y().whileTrue(new ElevatorToPos(Elevator, 4));
 
     /* SYSID CONTROLLS FOR CONTROLLER 3 (port 2) */ //COMMENT OUT AFTER DONE WITH SYSID
-    sysid.a().whileTrue(m_robotDrive.routine.quasistaticForward());
-    sysid.b().whileTrue(m_robotDrive.routine.quasistaticReverse());
-    sysid.x().whileTrue(m_robotDrive.routine.dynamicForward());
-    sysid.y().whileTrue(m_robotDrive.routine.dynamicReverse());
+    //sysid.a().whileTrue(m_robotDrive.routine.quasistaticForward());
+    //sysid.b().whileTrue(m_robotDrive.routine.quasistaticReverse());
+    //sysid.x().whileTrue(m_robotDrive.routine.dynamicForward());
+    //sysid.y().whileTrue(m_robotDrive.routine.dynamicReverse());
 
 
     //operator.y().whileTrue(new ElevatorUp(Elevator)); 

@@ -7,7 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "test1"
+            "pathName": "L1CoralStraight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
           }
         }
       ]

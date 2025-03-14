@@ -24,6 +24,7 @@ public class Elevator extends SubsystemBase {
     private DigitalInput highSensor;
     private RelativeEncoder encoder;
     private SparkClosedLoopController elevatorPID;
+    private PIDController PID = new PIDController(0.5, 0, 0);
 
     SparkFlexConfig elevatorconfig1 = new SparkFlexConfig();
     SparkFlexConfig elevatorconfig2 = new SparkFlexConfig();
@@ -36,19 +37,20 @@ public class Elevator extends SubsystemBase {
         encoder = motor1.getExternalEncoder();
         encoder.setPosition(0);
         elevatorPID = motor1.getClosedLoopController();
-        elevatorconfig2.follow (motor1);
+        
         elevatorconfig1.closedLoop.pid(2.3, 0, 0);
         elevatorconfig1.inverted(true);
+        elevatorconfig2.follow (motor1);
         //elevatorconfig2.inverted(true);
-        motor1.configure (elevatorconfig1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        motor2.configure (elevatorconfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+       // motor1.configure (elevatorconfig1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        //motor2.configure (elevatorconfig2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         lowSensor = new DigitalInput(0); //Port 0 DIO
         highSensor = new DigitalInput(1); //Port 1 DIO
       
     }
     public void setSpeed(double speed){
-        System.out.println(encoder.getPosition());
+        System.out.println("Encoder Position: " + encoder.getPosition());
         //System.out.println(!highSensor.get());
         
 
@@ -58,7 +60,7 @@ public class Elevator extends SubsystemBase {
           motor2.set(0);
           encoder.setPosition(0);
         }
-        else if (speed < 0 && encoder.getPosition() <=1.00)
+        else if (speed < 0 && encoder.getPosition() <=2.50)
         {
           motor1.set(speed * 0.30);
           motor2.set(speed * 0.30);
@@ -70,7 +72,7 @@ public class Elevator extends SubsystemBase {
 
 
         }
-        else if (speed > 0 && encoder.getPosition() >= 9.00)
+        else if (speed > 0 && encoder.getPosition() >= 7.00)
         {
           motor1.set(speed * 0.30);
           motor2.set(speed * 0.30);
@@ -81,13 +83,14 @@ public class Elevator extends SubsystemBase {
           motor2.set(speed);
         }
     }
-    public void moveTo(double pos) {
-      //double index = pos - 1;
-      //double[] positions = {1.0, 2.9, 5.2, 9.9};
-      position = pos;
-      elevatorPID.setReference(pos, ControlType.kPosition);
+    public void moveTo(int pos) {
+      int index = pos - 1;
+      double[] positions = {1.0, 2.9, 5.2, 9.9};
+     // elevatorPID.setReference(pos, ControlType.kPosition);
+     //System.out.println("PID Output: " + PID.calculate(encoder.getPosition(), pos));
 
-     /*  if (positions[index] - encoder.getPosition() > 0.08)
+    //setSpeed(PID.calculate(encoder.getPosition(), pos));
+       if (positions[index] - encoder.getPosition() > 0.08)
       {
         setSpeed(1);
       }
@@ -99,7 +102,7 @@ public class Elevator extends SubsystemBase {
       {
         setSpeed(0);
       }
-      */
+  
     }
     @Override
     public void periodic() {
