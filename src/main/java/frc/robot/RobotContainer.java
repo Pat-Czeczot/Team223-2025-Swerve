@@ -209,8 +209,8 @@ public class RobotContainer {
     operator.leftTrigger().whileTrue(new CoralIntakeSuck(CoralIntake)); 
     operator.rightTrigger().whileTrue(new CoralIntakeSpit(CoralIntake)); 
 
-    operator.axisLessThan(XboxController.Axis.kLeftY.value, -0.15).whileTrue(new ElevatorUp(Elevator));
-    operator.axisGreaterThan(XboxController.Axis.kLeftY.value, 0.15).whileTrue(new ElevatorDown(Elevator));
+    operator.axisLessThan(XboxController.Axis.kLeftY.value, -0.15).whileTrue(new ElevatorUp(Elevator, driver.getLeftY()));
+    operator.axisGreaterThan(XboxController.Axis.kLeftY.value, 0.15).whileTrue(new ElevatorDown(Elevator, driver.getLeftY()));
 
     operator.axisLessThan(XboxController.Axis.kRightY.value, -0.15).whileTrue(new WristUp(Wrist));
     operator.axisGreaterThan(XboxController.Axis.kRightY.value, 0.15).whileTrue(new WristDown(Wrist));
