@@ -58,6 +58,11 @@ public class Elevator extends SubsystemBase {
           motor2.set(0);
           encoder.setPosition(0);
         }
+        else if (speed < 0 && encoder.getPosition() <=1.00)
+        {
+          motor1.set(speed * 0.30);
+          motor2.set(speed * 0.30);
+        }
         else if (speed > 0 && !highSensor.get())
         {
           motor1.set(0);
