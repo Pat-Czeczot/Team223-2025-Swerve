@@ -22,7 +22,7 @@ public class ElevatorUp extends Command {
 
   @Override
   public void execute() {
-  //  elevator.setSpeed(stickPos * Constants.elevatorMult);
+      elevator.setSpeed(1 * Constants.elevatorMult);
   }
   @Override
   public void end(boolean interrupted) {
