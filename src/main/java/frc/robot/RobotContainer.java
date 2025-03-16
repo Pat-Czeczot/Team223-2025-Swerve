@@ -87,7 +87,6 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
-  //private final CommandXboxController sysid = new CommandXboxController(2); //COMMENT THIS OUT WHEN YOU ARE DONE WITH SYSID
 
 
 
@@ -240,12 +239,6 @@ public class RobotContainer {
 
     //Testing For AutoStrafe
     //operator.povUp().whileTrue(new AutoStrafe(m_robotDrive, CoralIntake));
-
-    /* SYSID CONTROLLS FOR CONTROLLER 3 (port 2) */ //COMMENT OUT AFTER DONE WITH SYSID
-    //sysid.a().whileTrue(m_robotDrive.routine.quasistaticForward());
-    //sysid.b().whileTrue(m_robotDrive.routine.quasistaticReverse());
-    //sysid.x().whileTrue(m_robotDrive.routine.dynamicForward());
-    //sysid.y().whileTrue(m_robotDrive.routine.dynamicReverse());
 
 
     //operator.y().whileTrue(new ElevatorUp(Elevator)); 

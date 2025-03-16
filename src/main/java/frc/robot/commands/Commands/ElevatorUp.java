@@ -7,12 +7,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ElevatorUp extends Command {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private Elevator elevator;
-  private double stickPos;
 
-
-  public ElevatorUp(Elevator subsystem1){ //, double stickPos) {
+  public ElevatorUp(Elevator subsystem1) {
     elevator = subsystem1;
-    //this.stickPos = stickPos;
     addRequirements(subsystem1);
     
 }
@@ -22,7 +19,7 @@ public class ElevatorUp extends Command {
 
   @Override
   public void execute() {
-      elevator.setSpeed(1 * Constants.elevatorMult);
+    elevator.setSpeed(1 * Constants.elevatorMult);
   }
   @Override
   public void end(boolean interrupted) {

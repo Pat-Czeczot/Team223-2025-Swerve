@@ -16,12 +16,12 @@ public class ElevatorToPos extends Command {
     
 }
 @Override
-public void initialize() {
-  elevator.moveTo(position);
-}
+  public void initialize() {
+    }
 
-@Override
+  @Override
   public void execute() {
+    elevator.moveTo(position);
   }
   @Override
   public void end(boolean interrupted) {
