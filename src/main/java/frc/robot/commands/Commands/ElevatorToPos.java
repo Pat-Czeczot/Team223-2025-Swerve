@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ElevatorToPos extends Command {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private Elevator elevator;
-  private int position;
+  private double position;
 
-  public ElevatorToPos(Elevator subsystem1, int pos) {
+  public ElevatorToPos(Elevator subsystem1, double pos) {
     elevator = subsystem1;
     position = pos;
     addRequirements(subsystem1);

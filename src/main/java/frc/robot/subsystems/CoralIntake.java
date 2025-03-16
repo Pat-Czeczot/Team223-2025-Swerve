@@ -12,7 +12,7 @@ public class CoralIntake extends SubsystemBase {
     
     SparkMax leftflywheel;
     SparkMax rightflywheel;
-    DigitalInput beamSensor = new DigitalInput(3);
+    public DigitalInput beamSensor = new DigitalInput(3);
 
     public CoralIntake() {
         leftflywheel = new SparkMax(Constants.leftflywheelID, MotorType.kBrushless);
@@ -26,6 +26,12 @@ public class CoralIntake extends SubsystemBase {
         leftflywheel.set(speed);
         rightflywheel.set(speed);
     }
+
+      public void setSpeed(double speed1, double speed2)
+      {
+        leftflywheel.set(speed1);
+        rightflywheel.set(speed2);
+      }
     @Override
     public void periodic() {
       RobotContainer.updateLEDS(beamSensor.get());

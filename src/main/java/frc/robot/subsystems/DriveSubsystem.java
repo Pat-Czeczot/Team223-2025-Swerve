@@ -70,7 +70,7 @@ public class DriveSubsystem extends SubsystemBase {
   // Odometry class for tracking the robot's pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(m_gyro.getAngle()),
+      Rotation2d.fromDegrees(getHeading()),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -87,7 +87,7 @@ public class DriveSubsystem extends SubsystemBase {
   // Create a new DriveSubsystem
   public DriveSubsystem() {
     anglePIDController.enableContinuousInput(-180, 180);
-    m_gyro.reset();
+    zeroHeading();
 
     
     //Autobuilder || if it doesnt work, try replacing setChassisSpeeds with the drive function, call dan bc it might be difficult to implement
@@ -145,7 +145,7 @@ public class DriveSubsystem extends SubsystemBase {
   // Reset the odometry to the specified pose
   public void resetOdometry(Pose2d pose) {
     /*
-    m_gyro.reset(); //remove if isnt working or try m_gyro.resetDisplacement(), that might work as well
+    
     m_frontLeft.resetEncoders();
     m_frontRight.resetEncoders();
     m_rearLeft.resetEncoders();
@@ -190,7 +190,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     m_odometry.update(
-      Rotation2d.fromDegrees(m_gyro.getAngle()),
+      Rotation2d.fromDegrees(getHeading()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -375,7 +375,7 @@ public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelativ
 
   // Get the rotation rate of the robot
   public double getTurnRate() {
-    return m_gyro.getAngle() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    return getHeading() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
 

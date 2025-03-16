@@ -19,7 +19,7 @@ public class CoralIntakeSpit extends Command {
 
   @Override
   public void execute() {
-    coralIntake.setSpeed(1 * Constants.leftflywheelMult);
+    coralIntake.setSpeed(-1 * Constants.leftflywheelMult);
     
   }
   @Override

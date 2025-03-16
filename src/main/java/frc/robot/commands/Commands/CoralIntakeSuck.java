@@ -18,7 +18,7 @@ public class CoralIntakeSuck extends Command {
 
   @Override
   public void execute() {
-    coralIntake.setSpeed(-1 * Constants.leftflywheelMult);
+    coralIntake.setSpeed(1 * Constants.leftflywheelMult);
   }
   @Override
   public void end(boolean interrupted) {

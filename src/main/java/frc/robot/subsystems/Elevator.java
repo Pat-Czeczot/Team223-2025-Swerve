@@ -5,6 +5,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -16,6 +18,7 @@ public class Elevator extends SubsystemBase {
     private DigitalInput lowSensor;
     private DigitalInput highSensor;
     private RelativeEncoder encoder;
+    private PIDController pid;
     
 
 
@@ -29,27 +32,32 @@ public class Elevator extends SubsystemBase {
         highSensor = new DigitalInput(1); //Port 1 DIO
         motor1.setInverted(true);
         motor2.setInverted(true);
+        pid = new PIDController(0.5, 0, 0);
       //motor1.burnFlash();
       //motor2.burnFlash();
       //10.4
     }
     public void setSpeed(double speed){
-        System.out.println(encoder.getPosition());
-        //System.out.println(!highSensor.get());
+        //System.out.println(encoder.getPosition());
+       // System.out.println(!highSensor.get());
         
 
-        if (speed < 0 && !lowSensor.get()) 
+         if (speed < 0 && !lowSensor.get()) 
         {
           motor1.set(0);
           motor2.set(0);
           encoder.setPosition(0);
         }
+        else if (speed < 0 && encoder.getPosition() <=2.50)
+        {
+          motor1.set(speed * 0.30);
+          motor2.set(speed * 0.30);  
+
+        }
         else if (speed > 0 && !highSensor.get())
         {
           motor1.set(0);
           motor2.set(0);
-
-
         }
         else if (speed > 0 && encoder.getPosition() >= 9.00)
         {
@@ -62,15 +70,42 @@ public class Elevator extends SubsystemBase {
           motor2.set(speed);
         }
     }
-    public void moveTo(int pos) {
-      int index = pos - 1;
-      double[] positions = {1.0, 2.9, 5.2, 9.9};
 
-      if (positions[index] - encoder.getPosition() > 0.08)
+    private void setSpeedAuto(double speed){
+     // System.out.println(encoder.getPosition());
+     // System.out.println(!highSensor.get());
+      
+
+       if (speed < 0 && !lowSensor.get()) 
+      {
+        motor1.set(0);
+        motor2.set(0);
+        encoder.setPosition(0);
+      }
+      else if (speed > 0 && !highSensor.get())
+      {
+        motor1.set(0);
+        motor2.set(0);
+      }
+      else
+      {
+        motor1.set(speed);
+        motor2.set(speed);
+      }
+  }
+    
+    public void moveTo(double pos) {
+      //int index = pos - 1;
+      //double[] positions = {1.0, 2.5, 5.7, 9.9};
+
+      setSpeedAuto(MathUtil.clamp(pid.calculate(encoder.getPosition(), pos), -1, 1));
+
+       
+     /*  if (pos - encoder.getPosition() > 0.08)
       {
         setSpeed(1);
       }
-      else if (encoder.getPosition() - positions[index] > 0.08)
+      else if (encoder.getPosition() - pos > 0.08)
       {
         setSpeed(-1);
       }
@@ -78,6 +113,7 @@ public class Elevator extends SubsystemBase {
       {
         setSpeed(0);
       }
+      */
       
     }
     @Override
