@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.utils.SwerveUtils;
+import frc.robot.utils.DrivetrainRoutine;
 import pabeles.concurrency.ConcurrencyOps.NewInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -34,22 +35,22 @@ import com.studica.frc.AHRS;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
-  private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
+  public final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
       DriveConstants.kFrontLeftTurningCanId,
       DriveConstants.kFrontLeftChassisAngularOffset);
 
-  private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
+  public final MAXSwerveModule m_frontRight = new MAXSwerveModule(
       DriveConstants.kFrontRightDrivingCanId,
       DriveConstants.kFrontRightTurningCanId,
       DriveConstants.kFrontRightChassisAngularOffset);
 
-  private final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
+  public final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
       DriveConstants.kRearLeftDrivingCanId, 
       DriveConstants.kRearLeftTurningCanId, 
       DriveConstants.kBackLeftChassisAngularOffset); 
 
-  private final MAXSwerveModule m_rearRight = new MAXSwerveModule( 
+  public final MAXSwerveModule m_rearRight = new MAXSwerveModule( 
       DriveConstants.kRearRightDrivingCanId,
       DriveConstants.kRearRightTurningCanId, 
       DriveConstants.kBackRightChassisAngularOffset);
@@ -80,25 +81,26 @@ public class DriveSubsystem extends SubsystemBase {
 
   private boolean isPathFlipped = false;
 
-  private SysIdRoutine r1 = new SysIdRoutine(new Config(), 
-    new Mechanism(null, null, this)
-  );
+  public final DrivetrainRoutine routine;
 
   // Create a new DriveSubsystem
   public DriveSubsystem() {
     anglePIDController.enableContinuousInput(-180, 180);
     zeroHeading();
 
+    routine = new DrivetrainRoutine(this);
     
     //Autobuilder || if it doesnt work, try replacing setChassisSpeeds with the drive function, call dan bc it might be difficult to implement
     AutoBuilder.configure(
       this::getPose, 
       this::resetOdometry, 
       this::getRobotRelativeSpeeds, 
-      (speeds, feedforwards) -> setChassisSpeeds(speeds), //we can change this to use feedforward information but it is not necessary 
+      (speeds, feedforwards) -> {
+        setChassisSpeeds(speeds);
+      }, //we can change this to use feedforward information but it is not necessary 
       new PPHolonomicDriveController( // YOU WILL HAVE TO TUNE THESE VALUES ALONG WITH THE OTHER PID VALUES USING SYSID for 2025, THESE ARE ONLY TEMP DEFAULTS
-        new PIDConstants(0.027, 0.001, 0.001), // Translation PID constants
-        new PIDConstants(0.05, 0.0053, 0.001) // Rotation PID constants
+        new PIDConstants(0.10187, 0.0, 0.0), // Translation PID constants
+        new PIDConstants(0.0, 0.0, 0.0) // Rotation PID constants
       ),
       new RobotConfig( //YOU WILL HAVE TO CALCULATE ALL OF THESE VARIABLES WHENEVER THE ROBOT SIGNIFICANTLY CHANGES, THESE ARE ONLY TEMP DEFAULTS
         52.0, //mass, kg

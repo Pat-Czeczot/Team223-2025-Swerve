@@ -7,12 +7,17 @@
         {
           "type": "path",
           "data": {
+<<<<<<< HEAD
             "pathName": "L4CoralStraight"
+=======
+            "pathName": "L1CoralStraight"
+>>>>>>> 804e25247023b76009fec1c3cde469094a22825a
           }
         },
         {
           "type": "named",
           "data": {
+<<<<<<< HEAD
             "name": "L3Elevator"
           }
         },
@@ -38,6 +43,9 @@
           "type": "named",
           "data": {
             "name": "ElevatorDown"
+=======
+            "name": null
+>>>>>>> 804e25247023b76009fec1c3cde469094a22825a
           }
         }
       ]
