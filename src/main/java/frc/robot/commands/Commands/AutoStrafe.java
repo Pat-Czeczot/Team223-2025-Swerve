@@ -27,7 +27,7 @@ public class AutoStrafe extends Command {
   public void execute() {
     if (!coralIntake.beamSensor.get() && !isTripped)
     {
-        swerve.drive(0, 0.1, 0, false);
+        swerve.drive(0, 0.06, 0, false);
     }
     else
     {
@@ -35,7 +35,7 @@ public class AutoStrafe extends Command {
         isTripped = true;
     }
     
-    
+    isFinished();
   }
   @Override
   public void end(boolean interrupted) {
@@ -43,7 +43,7 @@ public class AutoStrafe extends Command {
   }
   @Override
   public boolean isFinished() {
-    return false;
+    return isTripped;
   }
     
 }

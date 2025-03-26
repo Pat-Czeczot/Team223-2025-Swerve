@@ -125,12 +125,16 @@ public class DriveSubsystem extends SubsystemBase {
         new Translation2d(0.29845, -0.36830) //rear right
       ),
       () -> {
+
+        /* 
         Optional<Alliance> alliance = DriverStation.getAlliance();
         if (alliance.isPresent())
         {
           return alliance.get() == DriverStation.Alliance.Red;
         }
+        */
         return false; //makes the path default to blue side if it cant determine a side
+      
       },
       this
       );

@@ -27,10 +27,9 @@ public class CoralIntake extends SubsystemBase {
         rightflywheel.set(speed);
     }
 
-      public void setSpeed(double speed1, double speed2)
-      {
-        leftflywheel.set(speed1);
-        rightflywheel.set(speed2);
+      public void setSeperateSpeeds(double speedLeft, double speedRight) {
+        leftflywheel.set(speedLeft);
+        rightflywheel.set(speedRight);
       }
     @Override
     public void periodic() {
@@ -39,4 +38,4 @@ public class CoralIntake extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
     }
-  }
+  }  

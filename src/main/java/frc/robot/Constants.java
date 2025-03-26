@@ -82,7 +82,7 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
-    public static final double kDriveDeadband = 0.1;
+    public static final double kDriveDeadband = 0.075;
   }
 
   public static final class AutoConstants { 
@@ -128,8 +128,7 @@ public static int WristID = 26;
 
 /* Speed multipliers */
 public static double algaeintakeMult = 1;
-public static double leftflywheelMult = 1;
-public static double rightflywheelMult = 1;
+public static double flywheelsMult = 1;
 public static double elevatorMult = 1;
 public static double CoralArmMult = 0.25;
 public static double GroundCoralMult = 0.8;

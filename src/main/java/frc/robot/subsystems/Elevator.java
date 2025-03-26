@@ -38,7 +38,7 @@ public class Elevator extends SubsystemBase {
       //10.4
     }
     public void setSpeed(double speed){
-        //System.out.println(encoder.getPosition());
+        System.out.println(encoder.getPosition());
        // System.out.println(!highSensor.get());
         
 
@@ -72,11 +72,11 @@ public class Elevator extends SubsystemBase {
     }
 
     private void setSpeedAuto(double speed){
-     // System.out.println(encoder.getPosition());
+      System.out.println(encoder.getPosition());
      // System.out.println(!highSensor.get());
       
 
-       if (speed < 0 && !lowSensor.get()) 
+      if (speed < 0 && !lowSensor.get()) 
       {
         motor1.set(0);
         motor2.set(0);

@@ -1,0 +1,161 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L4CoralStraight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3Elevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoStrafe"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4Elevator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorAlgaeDown"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CoralToBargeCorrection"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WristDown"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlgaeIn"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "L4CoralCorrection"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "WristUp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "KeepAlgae"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CoralToBarge"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "KeepAlgae"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlgaeL4Elevator"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ScoreBarge"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "KeepAlgae"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "WristUp"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlgaeOut"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BargeBackup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorDown"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

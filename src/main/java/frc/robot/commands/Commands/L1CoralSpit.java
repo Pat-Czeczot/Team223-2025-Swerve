@@ -1,16 +1,19 @@
 package frc.robot.commands.Commands;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.CoralIntake;
+import frc.robot.subsystems.CoralIntake; 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class CoralIntakeSpit extends Command {
+public class L1CoralSpit extends Command {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private CoralIntake coralIntake;
+  private double speedLeft, speedRight;
 
-  public CoralIntakeSpit(CoralIntake subsystem1) {
+  public L1CoralSpit(CoralIntake subsystem1, double speedLeft, double speedRight) { 
     coralIntake = subsystem1;
-    addRequirements(subsystem1);
+    this.speedLeft = speedLeft;
+    this.speedRight = speedRight;
+    addRequirements(subsystem1); 
 }
 @Override
   public void initialize() {
@@ -18,12 +21,12 @@ public class CoralIntakeSpit extends Command {
 
   @Override
   public void execute() {
-    coralIntake.setSpeed(-1 * Constants.flywheelsMult);
+    coralIntake.setSeperateSpeeds(speedLeft,  speedRight);
   }
   @Override
   public void end(boolean interrupted) {
     coralIntake.setSpeed(0);
-    
+
   }
   @Override
   public boolean isFinished() {

@@ -29,17 +29,16 @@ import frc.robot.Constants.OIConstants;
 import pabeles.concurrency.IntObjectTask;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -53,7 +52,6 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.CoralArm;
 import frc.robot.subsystems.GroundCoral;
-
 
 //Commands
 import frc.robot.commands.Commands.AlgaeIntakeSpit;
@@ -88,17 +86,9 @@ public class RobotContainer {
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
 
-
-
-  public final Servo servo1 = new Servo(0);
+ // public final Servo servo1 = new Servo(0);
+ // public final Servo servo2 = new Servo(1);
   
-  public final Servo servo2 = new Servo(1);
-
-  
-  public static AddressableLED LEDS = new AddressableLED(2);
-  public static AddressableLEDBuffer LEDDefaultBuffer;
-  public static AddressableLEDBuffer LEDIndexBuffer;
-  public static AddressableLEDBuffer LEDLimelightBuffer;
 
   /* Subsystems */
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
@@ -113,6 +103,10 @@ public class RobotContainer {
   private final SendableChooser<Command> chooser;
   public Pose2d startingPose;
   
+  public static AddressableLED LEDS = new AddressableLED(2);
+  public static AddressableLEDBuffer LEDDefaultBuffer;
+  public static AddressableLEDBuffer LEDIndexBuffer;
+  public static AddressableLEDBuffer LEDLimelightBuffer;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -122,12 +116,25 @@ public class RobotContainer {
     m_robotDrive.zeroHeading();
 
     Map<String,Command> namedCommands = new HashMap<String,Command>();
-    //namedCommands.put("print test", new InstantCommand(() -> {System.out.println("Test Auto Works");}));
-    namedCommands.put("L3Elevator", new ElevatorToPos(elevator, 5.1).withTimeout(2));
+    //L1StraightAuto
     namedCommands.put("coralArm", new SequentialCommandGroup(new CoralArmDown(CoralArm).withTimeout(0.4), new WaitCommand(0.3), new GroundCoralSpit(groundCoral).withTimeout(1)));
-    namedCommands.put("L4Elevator", new SequentialCommandGroup(new ElevatorUp(elevator).withTimeout(2), new CoralIntakeSpit(CoralIntake).withTimeout(2)));
+
+    //L4StraightAuto
+    namedCommands.put("L3Elevator", new ElevatorToPos(elevator, 9.4).withTimeout(1.3));
+    namedCommands.put("AutoStrafe", new AutoStrafe(m_robotDrive, CoralIntake).withTimeout(5));
+    namedCommands.put("L4Elevator", new SequentialCommandGroup(new ElevatorUp(elevator).withTimeout(0.7), new CoralIntakeSpit(CoralIntake).withTimeout(0.7)));
     namedCommands.put("ElevatorDown", new SequentialCommandGroup(new ElevatorDown(elevator).withTimeout(2)));
-    namedCommands.put("AutoStrafe", new AutoStrafe(m_robotDrive, CoralIntake).withTimeout(4));
+
+    //L4CoralToBarge
+    namedCommands.put("ElevatorAlgaeDown", new SequentialCommandGroup(new ElevatorToPos(elevator, 2.7).withTimeout(1.3)));
+    namedCommands.put("WristDown", new WristDown(Wrist).withTimeout(0.9));
+    namedCommands.put("AlgaeIn", new AlgaeIntakeSpit(AlgaeIntake).withTimeout(0.5));
+    namedCommands.put("WristUp", new WristUp(Wrist).withTimeout(2));
+    namedCommands.put("AlgaeOut", new AlgaeIntakeSuck(AlgaeIntake).withTimeout(0.5));
+    namedCommands.put("KeepAlgae", new RepeatCommand(new SequentialCommandGroup(new AlgaeIntakeSpit(AlgaeIntake).withTimeout(0.3), new WaitCommand(0.5))));
+    namedCommands.put("AlgaeL4Elevator", new ElevatorUp(elevator).withTimeout(1.5));
+
+
     //namedCommands.put("lockServo", new SequentialCommandGroup(new InstantCommand(() -> {servo1.set(0.56); servo2.set(0.365);})));
     NamedCommands.registerCommands(namedCommands);
     chooser = AutoBuilder.buildAutoChooser();
@@ -210,18 +217,16 @@ public class RobotContainer {
             m_robotDrive));
     */
 
-     operator.rightBumper().whileTrue(new AlgaeIntakeSuck(AlgaeIntake)); 
-     operator.leftBumper().whileTrue(new AlgaeIntakeSpit(AlgaeIntake));  
+    operator.rightBumper().whileTrue(new AlgaeIntakeSuck(AlgaeIntake)); 
+    operator.leftBumper().whileTrue(new AlgaeIntakeSpit(AlgaeIntake));  
            
     driver.y().whileTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive)); //Change this slightly to reset gyro when driving
 
     operator.rightTrigger().whileTrue(new CoralIntakeSuck(CoralIntake)); 
     operator.leftTrigger().whileTrue(new CoralIntakeSpit(CoralIntake)); 
 
-    //operator.axisLessThan(XboxController.Axis.kLeftY.value, -0.15).whileTrue(new ElevatorUp(elevator));
-    //operator.axisGreaterThan(XboxController.Axis.kLeftY.value, 0.15).whileTrue(new ElevatorDown(elevator));
-
-
+    //operator.povUp().whileTrue(new LeftCoralWheelSpit(LeftCoralWheel)); 
+    //operator.povUp().whileTrue(new RightCoralWheelSpit(RightCoralWheel)); 
 
     operator.axisLessThan(XboxController.Axis.kRightY.value, -0.15).whileTrue(new WristUp(Wrist));
     operator.axisGreaterThan(XboxController.Axis.kRightY.value, 0.15).whileTrue(new WristDown(Wrist));
@@ -232,14 +237,18 @@ public class RobotContainer {
     driver.leftBumper().whileTrue(new CoralArmUp(CoralArm)); 
     driver.rightBumper().whileTrue(new CoralArmDown(CoralArm)); 
 
-    operator.x().whileTrue(new ElevatorToPos(elevator, 1.0));
+    operator.x().whileTrue(new ElevatorToPos(elevator, 5.3));
     operator.a().whileTrue(new ElevatorToPos(elevator, 2.6));
     operator.b().whileTrue(new ElevatorToPos(elevator, 5.1));
     operator.y().whileTrue(new ElevatorToPos(elevator, 9.9));
 
+    operator.start().whileTrue(new AutoStrafe(m_robotDrive, CoralIntake));
+
+    //operator.axisLessThan(XboxController.Axis.kLeftY.value, -0.15).whileTrue(new ElevatorUp(elevator));
+    //operator.axisGreaterThan(XboxController.Axis.kLeftY.value, 0.15).whileTrue(new ElevatorDown(elevator));
+
     //Testing For AutoStrafe
     //operator.povUp().whileTrue(new AutoStrafe(m_robotDrive, CoralIntake));
-
 
     //operator.y().whileTrue(new ElevatorUp(Elevator)); 
     //operator.x().whileTrue(new ElevatorDown(Elevator));
@@ -265,16 +274,16 @@ public class RobotContainer {
       );
 
       driver.povLeft().whileTrue(new RunCommand(
-      () -> m_robotDrive.drive(0, 0.1, 0, false)
+      () -> m_robotDrive.drive(0, 0.06, 0, false)
       ));
       driver.povRight().whileTrue(new RunCommand(
-      () -> m_robotDrive.drive(0, -0.1, 0, false)
+      () -> m_robotDrive.drive(0, -0.06, 0, false)
       ));
       driver.povUp().whileTrue(new RunCommand(
-      () -> m_robotDrive.drive(0.1, 0, 0, false)
+      () -> m_robotDrive.drive(0.06, 0, 0, false)
       ));
       driver.povDown().whileTrue(new RunCommand(
-      () -> m_robotDrive.drive(-0.1, 0, 0, false)
+      () -> m_robotDrive.drive(-0.06, 0, 0, false)
       ));
   }
 

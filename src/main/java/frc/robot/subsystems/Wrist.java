@@ -36,7 +36,6 @@ public class Wrist extends SubsystemBase {
     else if (speed > 0 && wristEncoder.getPosition() >= 1.00)
     {
       Wrist.set(speed * 0);
-      
     }
     else
     {
