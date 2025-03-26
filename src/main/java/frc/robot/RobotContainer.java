@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Spark;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -98,16 +99,18 @@ public class RobotContainer {
   public final CoralArm CoralArm = new CoralArm();
   public final GroundCoral groundCoral = new GroundCoral();
   public final Wrist Wrist = new Wrist();
+  public final Spark leds = new Spark(3);
 
   /* Auto */
   private final SendableChooser<Command> chooser;
   public Pose2d startingPose;
-  
+
+  /*
   public static AddressableLED LEDS = new AddressableLED(2);
   public static AddressableLEDBuffer LEDDefaultBuffer;
   public static AddressableLEDBuffer LEDIndexBuffer;
   public static AddressableLEDBuffer LEDLimelightBuffer;
-
+*/
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -162,8 +165,11 @@ public class RobotContainer {
         elevator
       ));
 
+
+    leds.set(-0.59);
     
     //LED SET UP CODE
+    /*
     LEDS.setLength(159);
     LEDDefaultBuffer = new AddressableLEDBuffer(159);
     LEDIndexBuffer = new AddressableLEDBuffer(159);
@@ -172,29 +178,9 @@ public class RobotContainer {
     red.applyTo(LEDDefaultBuffer);
     green.applyTo(LEDIndexBuffer);
     LEDS.setData(LEDDefaultBuffer);
-    /*
-    LEDDefaultBuffer = new AddressableLEDBuffer(159);
-    LEDIndexBuffer = new AddressableLEDBuffer(159);
-    LEDLimelightBuffer = new AddressableLEDBuffer(159);
-    for (int i = 0; i < 159; i++)
-    {
-        //GRB!!!
-        LEDIndexBuffer.setRGB(i, 225, 255, 0);
-    }
-    for (int i = 0; i < 159; i++)
-    {
-        //GRB!!!
-        LEDDefaultBuffer.setRGB(i, 0, 0, 0);
-    }
-    for (int i = 0; i < 159; i++)
-    {
-        //GRB!!!
-        LEDLimelightBuffer.setRGB(i, 255, 0, 0);
-    }
-    */
     LEDS.start();
     LEDS.setData(LEDDefaultBuffer);
-      
+      */
       
   }        
 
@@ -288,13 +274,20 @@ public class RobotContainer {
   }
 
   public static void updateLEDS(boolean isAligned) {
+    /*
     if (isAligned) {
         LEDS.setData(LEDIndexBuffer);
     }
     else {
         LEDS.setData(LEDDefaultBuffer);
     }
-  }
+    */
+    if (isAligned) {
+      leds.set(-0.41);
+    }
+    else {
+      leds.set(-0.59);
+    }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
